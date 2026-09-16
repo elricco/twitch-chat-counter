@@ -1,0 +1,42 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#chatcounter {
+  position: relative;
+  margin: 0 auto;
+  padding: 0.5rem;
+}
+
+.text,
+.month,
+.counter {
+  display: inline-block;
+  padding: 0.5rem;
+  white-space: nowrap;
+}
+
+.history-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.5rem;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.history-item .h-month {
+  opacity: 0.85;
+}

@@ -1,0 +1,157 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #f4f4f5;
+  color: #1a1a1a;
+}
+
+#layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 1.4rem;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: #fff;
+}
+
+legend {
+  font-weight: 700;
+  padding: 0 0.4rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+
+label input[type="text"],
+label input[type="number"],
+label select {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+label.checkbox-row,
+label.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+label.checkbox-row input,
+label.radio-row input {
+  width: auto;
+  margin: 0;
+}
+
+#channel, #channels {
+  margin-bottom: 0.75rem;
+}
+
+input[type="color"] {
+  width: 60px;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 0.25rem;
+}
+
+#previewPane {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+}
+
+#previewFrameWrapper {
+  background:
+    linear-gradient(45deg, #ccc 25%, transparent 25%),
+    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  margin-bottom: 1.5rem;
+}
+
+#previewFrame {
+  width: 100%;
+  height: 260px;
+  border: none;
+  display: block;
+}
+
+.url-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.url-row input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+.url-row button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #6441a5;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.url-row button:hover {
+  background: #503584;
+}
+
+.feedback {
+  color: #2a8f4e;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 800px) {
+  #layout {
+    grid-template-columns: 1fr;
+  }
+  #previewPane {
+    position: static;
+  }
+}

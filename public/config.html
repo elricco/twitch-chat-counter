@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Counter – Konfiguration</title>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+<link rel="stylesheet" href="config.css">
+</head>
+<body>
+
+<div id="layout">
+  <form id="configForm">
+    <h1>Chat Counter Konfiguration</h1>
+
+    <fieldset>
+      <legend>Kanal</legend>
+
+      <label class="radio-row">
+        <input type="radio" name="channelMode" value="single" checked>
+        Einzelner Kanal
+      </label>
+      <input type="text" id="channel" placeholder="kanalname">
+
+      <label class="radio-row">
+        <input type="radio" name="channelMode" value="aggregate">
+        Mehrere Kanäle (aggregiert)
+      </label>
+      <input type="text" id="channels" placeholder="kanal1,kanal2,kanal3" disabled>
+    </fieldset>
+
+    <fieldset>
+      <legend>Allgemein</legend>
+
+      <label>Aktualisierung (ms)
+        <input type="number" id="refreshRate" value="5000" min="1000" step="500">
+      </label>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="history">
+        Historie (vergangene Monate) anzeigen
+      </label>
+
+      <label>Textausrichtung
+        <select id="textAlign">
+          <option value="left">Links</option>
+          <option value="center">Zentriert</option>
+          <option value="right">Rechts</option>
+        </select>
+      </label>
+
+      <label>Hintergrund (Vorschau)
+        <input type="color" id="bgColor" value="#0e0e10">
+      </label>
+      <label class="checkbox-row">
+        <input type="checkbox" id="bgTransparent" checked>
+        Transparent (für OBS Browser-Source)
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Vortext</legend>
+      <label>Text
+        <input type="text" id="preText" placeholder="z.B. Chat-Nachrichten diesen Monat:">
+      </label>
+      <label>Schriftart (Google Font)
+        <input type="text" id="preTextFont" value="Bangers">
+      </label>
+      <label>Schriftgröße (px)
+        <input type="number" id="preTextSize" value="32" min="1">
+      </label>
+      <label>Schriftstärke
+        <select id="preTextWeight" class="weight-select"></select>
+      </label>
+      <label>Farbe
+        <input type="color" id="preTextColor" value="#fdb336">
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Monat</legend>
+      <label class="checkbox-row">
+        <input type="checkbox" id="showMonth">
+        Monatsname anzeigen
+      </label>
+      <label>Schriftart (Google Font)
+        <input type="text" id="monthFont" value="Bangers">
+      </label>
+      <label>Schriftgröße (px)
+        <input type="number" id="monthSize" value="32" min="1">
+      </label>
+      <label>Schriftstärke
+        <select id="monthWeight" class="weight-select"></select>
+      </label>
+      <label>Farbe
+        <input type="color" id="monthColor" value="#fdb336">
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Zähler</legend>
+      <label>Schriftart (Google Font)
+        <input type="text" id="counterFont" value="Bangers">
+      </label>
+      <label>Schriftgröße (px)
+        <input type="number" id="counterSize" value="70" min="1">
+      </label>
+      <label>Schriftstärke
+        <select id="counterWeight" class="weight-select"></select>
+      </label>
+      <label>Farbe
+        <input type="color" id="counterColor" value="#fdb336">
+      </label>
+    </fieldset>
+  </form>
+
+  <div id="previewPane">
+    <h2>Vorschau</h2>
+    <div id="previewFrameWrapper">
+      <iframe id="previewFrame" title="Vorschau"></iframe>
+    </div>
+
+    <h2>URL für OBS Browser-Source</h2>
+    <div class="url-row">
+      <input type="text" id="generatedUrl" readonly>
+      <button type="button" id="copyBtn">Kopieren</button>
+    </div>
+    <p id="copyFeedback" class="feedback" hidden>In Zwischenablage kopiert!</p>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="config.js"></script>
+</body>
+</html>
