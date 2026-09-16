@@ -1,12 +1,27 @@
 const express = require('express');
 const path = require('path');
+const { createRateLimiter } = require('./rateLimiter');
 
-function createServer(registry, twitchClient) {
+function createServer(registry, twitchClient, options = {}) {
   const app = express();
+
+  // Nur relevant, wenn hinter einem Reverse-Proxy deployed (z.B. Apache/nginx auf
+  // Shared Hosting): sonst sieht req.ip immer die Proxy-IP statt der echten Client-IP,
+  // was das Rate-Limiting wirkungslos macht. Bewusst opt-in per ENV (TRUST_PROXY),
+  // da ein blind gesetztes trust proxy ohne echten Proxy X-Forwarded-For-Spoofing erlaubt.
+  if (options.trustProxy) {
+    app.set('trust proxy', options.trustProxy);
+  }
 
   // Darstellungsseite (public/index.html, style.css, app.js) unter "/" ausliefern.
   // Aufruf z.B. als http://host/?channel=kanalname oder ?channels=kanal1,kanal2
   app.use(express.static(path.join(__dirname, '..', 'public')));
+
+  // Optional: nur aktiv, wenn ueber ENV konfiguriert (siehe .env.example),
+  // damit bestehende Setups sich nicht ungefragt im Verhalten aendern.
+  if (options.rateLimit) {
+    app.use('/api', createRateLimiter(options.rateLimit));
+  }
 
   // WICHTIG: Diese Route muss VOR /api/:channel/counter stehen, sonst wuerde
   // Express "aggregate" als Kanalnamen interpretieren und die generische

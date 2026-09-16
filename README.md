@@ -37,6 +37,9 @@ npm start
 | `FLUSH_INTERVAL_SECONDS` | Wie oft auf Platte geschrieben wird |
 | `PORT` | Port des HTTP-Servers |
 | `DATA_DIR` | Speicherort der JSON-Dateien |
+| `RATE_LIMIT_MAX` | Optional. Max. Requests pro IP und Zeitfenster auf `/api/*`. Ohne Angabe deaktiviert |
+| `RATE_LIMIT_WINDOW_MS` | Zeitfenster fuer das Rate-Limit in ms (Default `60000`) |
+| `TRUST_PROXY` | Optional. Nur setzen, wenn hinter einem Reverse-Proxy deployed (siehe Shared-Hosting-Abschnitt) |
 
 Bereits fest eingebaut (ohne Konfiguration ausgeschlossen): StreamElements,
 Nightbot, Moobot, Fossabot, Wizebot, Streamlabs, SoundAlerts, PretzelRocks,
@@ -142,6 +145,10 @@ pm2 start src/index.js --name twitch-chat-counter
 ```
 
 Voraussetzung ist lediglich Node.js ≥ 18 und Schreibrechte auf `DATA_DIR`.
+
+Läuft der Host hinter einem Reverse-Proxy (z.B. Apache/nginx via cPanel/Plesk), zusätzlich
+`TRUST_PROXY` setzen — sonst sieht die App immer nur die Proxy-IP, was `RATE_LIMIT_MAX`
+wirkungslos macht.
 
 ## Mehrere Kanäle
 
