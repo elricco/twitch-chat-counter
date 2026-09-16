@@ -77,10 +77,26 @@ function renderHistory(data, currentKey) {
   for (const key of keys) {
     const item = document.createElement('div');
     item.className = 'history-item';
-    item.innerHTML = `
-      <span class="h-month" style="font-family:'${config.monthFont}', sans-serif; font-size:${Math.round(historySize * 0.45)}px; color:${config.counterColor};">${formatMonthLabel(key)}</span>
-      <span class="h-count" style="font-family:'${config.counterFont}', sans-serif; font-size:${historySize}px; font-weight:${config.counterWeight}; color:${config.counterColor};">${data[key]}</span>
-    `;
+
+    // Ueber DOM-Properties statt innerHTML setzen: config.* stammt aus
+    // URL-Query-Parametern und darf niemals als HTML interpretiert werden (XSS).
+    const monthSpan = document.createElement('span');
+    monthSpan.className = 'h-month';
+    monthSpan.style.fontFamily = `'${config.monthFont}', sans-serif`;
+    monthSpan.style.fontSize = `${Math.round(historySize * 0.45)}px`;
+    monthSpan.style.color = config.counterColor;
+    monthSpan.textContent = formatMonthLabel(key);
+
+    const countSpan = document.createElement('span');
+    countSpan.className = 'h-count';
+    countSpan.style.fontFamily = `'${config.counterFont}', sans-serif`;
+    countSpan.style.fontSize = `${historySize}px`;
+    countSpan.style.fontWeight = config.counterWeight;
+    countSpan.style.color = config.counterColor;
+    countSpan.textContent = data[key];
+
+    item.appendChild(monthSpan);
+    item.appendChild(countSpan);
     historyEl.appendChild(item);
   }
 }
