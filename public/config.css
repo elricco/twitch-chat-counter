@@ -2,11 +2,44 @@
   box-sizing: border-box;
 }
 
+:root {
+  --bg: #f4f4f5;
+  --text: #1a1a1a;
+  --muted: #555;
+  --panel-bg: #fff;
+  --panel-border: #ddd;
+  --input-bg: #fff;
+  --input-border: #ccc;
+  --accent: #6441a5;
+  --accent-hover: #503584;
+  --success: #2a8f4e;
+  /* Bewusst fix (nicht theme-abhaengig): Karo-Muster als Transparenz-Indikator hinter
+     der Vorschau, bewusst in mittleren statt hellen Grautoenen, damit sowohl helle
+     (weisse) als auch dunkle Overlay-Texte dort lesbar bleiben - unabhaengig davon, ob
+     die Konfig-Seite selbst gerade hell oder dunkel dargestellt wird. */
+  --preview-checker-a: #7d7d84;
+  --preview-checker-b: #66666c;
+}
+
+:root[data-theme="dark"] {
+  --bg: #18181b;
+  --text: #efeff1;
+  --muted: #adadb8;
+  --panel-bg: #1f1f23;
+  --panel-border: #34343a;
+  --input-bg: #2a2a30;
+  --input-border: #46464e;
+  --accent: #a970ff;
+  --accent-hover: #bf94ff;
+  --success: #3ba55d;
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background: #f4f4f5;
-  color: #1a1a1a;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 #layout {
@@ -18,23 +51,85 @@ body {
   margin: 0 auto;
 }
 
+#topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 h1 {
   font-size: 1.4rem;
-  margin-top: 0;
+  margin: 0;
 }
 
 h2 {
   font-size: 1rem;
-  color: #555;
+  color: var(--muted);
   margin-bottom: 0.5rem;
 }
 
+/* Theme-Toggle als kleiner Schalter statt nackter Checkbox */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.theme-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--panel-border);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle-track::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+}
+
+.theme-toggle input:checked + .theme-toggle-track {
+  background: var(--accent);
+}
+
+.theme-toggle input:checked + .theme-toggle-track::before {
+  transform: translateX(16px);
+}
+
+.theme-toggle input:focus-visible + .theme-toggle-track {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 fieldset {
-  border: 1px solid #ddd;
+  border: 1px solid var(--panel-border);
   border-radius: 8px;
   margin-bottom: 1.25rem;
   padding: 1rem;
-  background: #fff;
+  background: var(--panel-bg);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 legend {
@@ -46,7 +141,7 @@ label {
   display: block;
   font-size: 0.85rem;
   margin-bottom: 0.75rem;
-  color: #333;
+  color: var(--muted);
 }
 
 label input[type="text"],
@@ -56,9 +151,15 @@ label select {
   width: 100%;
   margin-top: 0.25rem;
   padding: 0.4rem 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   font-size: 0.9rem;
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+.font-custom-input {
+  margin-top: 0.5rem;
 }
 
 label.checkbox-row,
@@ -82,9 +183,10 @@ input[type="color"] {
   width: 60px;
   height: 32px;
   padding: 2px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   margin-top: 0.25rem;
+  background: var(--input-bg);
 }
 
 #previewPane {
@@ -95,15 +197,16 @@ input[type="color"] {
 
 #previewFrameWrapper {
   background:
-    linear-gradient(45deg, #ccc 25%, transparent 25%),
-    linear-gradient(-45deg, #ccc 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #ccc 75%),
-    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    linear-gradient(45deg, var(--preview-checker-b) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--preview-checker-b) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--preview-checker-b) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--preview-checker-b) 75%);
+  background-color: var(--preview-checker-a);
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #ddd;
+  border: 1px solid var(--panel-border);
   margin-bottom: 1.5rem;
 }
 
@@ -122,28 +225,30 @@ input[type="color"] {
 .url-row input {
   flex: 1;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   font-size: 0.8rem;
   font-family: monospace;
+  background: var(--input-bg);
+  color: var(--text);
 }
 
 .url-row button {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
-  background: #6441a5;
+  background: var(--accent);
   color: #fff;
   cursor: pointer;
   font-size: 0.85rem;
 }
 
 .url-row button:hover {
-  background: #503584;
+  background: var(--accent-hover);
 }
 
 .feedback {
-  color: #2a8f4e;
+  color: var(--success);
   font-size: 0.85rem;
 }
 

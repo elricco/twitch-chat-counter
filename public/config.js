@@ -10,17 +10,20 @@ const els = {
 
   preText: document.getElementById('preText'),
   preTextFont: document.getElementById('preTextFont'),
+  preTextFontCustom: document.getElementById('preTextFontCustom'),
   preTextSize: document.getElementById('preTextSize'),
   preTextWeight: document.getElementById('preTextWeight'),
   preTextColor: document.getElementById('preTextColor'),
 
   showMonth: document.getElementById('showMonth'),
   monthFont: document.getElementById('monthFont'),
+  monthFontCustom: document.getElementById('monthFontCustom'),
   monthSize: document.getElementById('monthSize'),
   monthWeight: document.getElementById('monthWeight'),
   monthColor: document.getElementById('monthColor'),
 
   counterFont: document.getElementById('counterFont'),
+  counterFontCustom: document.getElementById('counterFontCustom'),
   counterSize: document.getElementById('counterSize'),
   counterWeight: document.getElementById('counterWeight'),
   counterColor: document.getElementById('counterColor'),
@@ -29,7 +32,10 @@ const els = {
   generatedUrl: document.getElementById('generatedUrl'),
   copyBtn: document.getElementById('copyBtn'),
   copyFeedback: document.getElementById('copyFeedback'),
+  themeToggle: document.getElementById('themeToggle'),
 };
+
+const CUSTOM_FONT_VALUE = '__custom__';
 
 // Schriftstärke-Dropdowns aus der gemeinsamen Definition befüllen
 document.querySelectorAll('.weight-select').forEach((select) => {
@@ -41,6 +47,42 @@ document.querySelectorAll('.weight-select').forEach((select) => {
     select.appendChild(opt);
   }
 });
+
+// Schriftart-Dropdowns aus der kuratierten Liste befüllen, plus Escape-Hatch für
+// beliebige andere Google Fonts (Freitext blieb bisher moeglich, das soll so bleiben).
+const fontSelectPairs = [
+  [els.preTextFont, els.preTextFontCustom],
+  [els.monthFont, els.monthFontCustom],
+  [els.counterFont, els.counterFontCustom],
+];
+
+for (const [select] of fontSelectPairs) {
+  for (const font of FONT_OPTIONS) {
+    const opt = document.createElement('option');
+    opt.value = font;
+    opt.textContent = font;
+    if (font === 'Bangers') opt.selected = true;
+    select.appendChild(opt);
+  }
+  const customOpt = document.createElement('option');
+  customOpt.value = CUSTOM_FONT_VALUE;
+  customOpt.textContent = 'Eigene Google Font …';
+  select.appendChild(customOpt);
+}
+
+for (const [select, customInput] of fontSelectPairs) {
+  select.addEventListener('change', () => {
+    customInput.hidden = select.value !== CUSTOM_FONT_VALUE;
+    if (!customInput.hidden) customInput.focus();
+  });
+}
+
+function resolveFont(select, customInput) {
+  if (select.value === CUSTOM_FONT_VALUE) {
+    return customInput.value.trim() || 'Bangers';
+  }
+  return select.value;
+}
 
 function getChannelMode() {
   return document.querySelector('input[name="channelMode"]:checked').value;
@@ -57,18 +99,18 @@ function collectConfig() {
     bg: els.bgTransparent.checked ? 'transparent' : els.bgColor.value,
 
     preText: els.preText.value,
-    preTextFont: els.preTextFont.value || 'Bangers',
+    preTextFont: resolveFont(els.preTextFont, els.preTextFontCustom),
     preTextSize: parseInt(els.preTextSize.value, 10) || 32,
     preTextWeight: els.preTextWeight.value,
     preTextColor: els.preTextColor.value,
 
     showMonth: els.showMonth.checked,
-    monthFont: els.monthFont.value || 'Bangers',
+    monthFont: resolveFont(els.monthFont, els.monthFontCustom),
     monthSize: parseInt(els.monthSize.value, 10) || 32,
     monthWeight: els.monthWeight.value,
     monthColor: els.monthColor.value,
 
-    counterFont: els.counterFont.value || 'Bangers',
+    counterFont: resolveFont(els.counterFont, els.counterFontCustom),
     counterSize: parseInt(els.counterSize.value, 10) || 70,
     counterWeight: els.counterWeight.value,
     counterColor: els.counterColor.value,
@@ -113,6 +155,24 @@ els.bgTransparent.addEventListener('change', () => {
   els.bgColor.disabled = els.bgTransparent.checked;
 });
 els.bgColor.disabled = els.bgTransparent.checked;
+
+// Theme-Toggle: Zustand wurde im <head>-Inline-Script schon vor dem ersten Paint
+// gesetzt (siehe config.html) - hier nur die Checkbox synchronisieren und auf
+// Umschalten reagieren.
+function safeLocalStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (err) {
+    // z.B. privates Fenster ohne Storage-Zugriff -> Theme gilt nur fuer diese Sitzung.
+  }
+}
+
+els.themeToggle.checked = document.documentElement.dataset.theme === 'dark';
+els.themeToggle.addEventListener('change', () => {
+  const theme = els.themeToggle.checked ? 'dark' : 'light';
+  document.documentElement.dataset.theme = theme;
+  safeLocalStorageSet('chatCounterTheme', theme);
+});
 
 els.copyBtn.addEventListener('click', async () => {
   try {

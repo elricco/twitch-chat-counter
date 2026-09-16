@@ -44,6 +44,17 @@ const FONT_WEIGHT_OPTIONS = [
   ['900', 'Black (900)'],
 ];
 
+// Kuratierte Auswahl an Google Fonts, die sich fuer Stream-Overlays eignen (grob nach
+// Charakter sortiert: laut/plakativ, dann verspielt/Retro, dann ruhig/sachlich).
+// "Bangers" bleibt bewusst an erster Stelle, da es der bestehende Default ist.
+const FONT_OPTIONS = [
+  'Bangers', 'Anton', 'Bebas Neue', 'Luckiest Guy', 'Titan One', 'Bungee',
+  'Righteous', 'Alfa Slab One', 'Passion One', 'Russo One', 'Archivo Black',
+  'Permanent Marker', 'Caveat', 'Pacifico',
+  'Press Start 2P', 'VT323', 'Orbitron',
+  'Montserrat', 'Poppins', 'Oswald', 'Rubik', 'Roboto Condensed', 'Kanit', 'Inter',
+];
+
 function parseParams(searchParams) {
   const result = {};
   for (const def of PARAM_DEFS) {
@@ -94,5 +105,5 @@ function formatMonthLabel(yearMonth) {
 // Nur fuer Unit-Tests unter Node (node --test) relevant: im Browser ist "module"
 // nicht definiert, daher hat dieser Block dort keinerlei Effekt.
 if (typeof module !== 'undefined') {
-  module.exports = { PARAM_DEFS, FONT_WEIGHT_OPTIONS, parseParams, buildQueryString, formatMonthLabel };
+  module.exports = { PARAM_DEFS, FONT_WEIGHT_OPTIONS, FONT_OPTIONS, parseParams, buildQueryString, formatMonthLabel };
 }

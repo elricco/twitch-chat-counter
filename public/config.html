@@ -6,13 +6,33 @@
 <title>Chat Counter – Konfiguration</title>
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 <link rel="stylesheet" href="config.css">
+<script>
+  // Vor dem ersten Paint setzen, damit beim Laden kein helles Aufblitzen entsteht,
+  // wenn Dark Mode gespeichert oder per OS-Einstellung aktiv ist.
+  (function () {
+    try {
+      var stored = localStorage.getItem('chatCounterTheme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+    } catch (err) {
+      // localStorage kann in manchen Kontexten (privates Fenster o.ae.) fehlschlagen -> Light-Default bleibt.
+    }
+  })();
+</script>
 </head>
 <body>
 
 <div id="layout">
-  <form id="configForm">
+  <div id="topbar">
     <h1>Chat Counter Konfiguration</h1>
+    <label class="theme-toggle">
+      <input type="checkbox" id="themeToggle">
+      <span class="theme-toggle-track" aria-hidden="true"></span>
+      Dark Mode
+    </label>
+  </div>
 
+  <form id="configForm">
     <fieldset>
       <legend>Kanal</legend>
 
@@ -64,7 +84,8 @@
         <input type="text" id="preText" placeholder="z.B. Chat-Nachrichten diesen Monat:">
       </label>
       <label>Schriftart (Google Font)
-        <input type="text" id="preTextFont" value="Bangers">
+        <select id="preTextFont" class="font-select"></select>
+        <input type="text" id="preTextFontCustom" class="font-custom-input" placeholder="Name der Google Font" hidden>
       </label>
       <label>Schriftgröße (px)
         <input type="number" id="preTextSize" value="32" min="1">
@@ -84,7 +105,8 @@
         Monatsname anzeigen
       </label>
       <label>Schriftart (Google Font)
-        <input type="text" id="monthFont" value="Bangers">
+        <select id="monthFont" class="font-select"></select>
+        <input type="text" id="monthFontCustom" class="font-custom-input" placeholder="Name der Google Font" hidden>
       </label>
       <label>Schriftgröße (px)
         <input type="number" id="monthSize" value="32" min="1">
@@ -100,7 +122,8 @@
     <fieldset>
       <legend>Zähler</legend>
       <label>Schriftart (Google Font)
-        <input type="text" id="counterFont" value="Bangers">
+        <select id="counterFont" class="font-select"></select>
+        <input type="text" id="counterFontCustom" class="font-custom-input" placeholder="Name der Google Font" hidden>
       </label>
       <label>Schriftgröße (px)
         <input type="number" id="counterSize" value="70" min="1">
