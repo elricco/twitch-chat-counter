@@ -24,8 +24,15 @@ class ChannelCounter {
 
   flushIfDirty() {
     if (!this.dirty) return;
-    saveCounters(this.channel, this.data);
-    this.dirty = false;
+    try {
+      saveCounters(this.channel, this.data);
+      this.dirty = false;
+    } catch (err) {
+      // Bewusst nicht werfen: ein einzelner fehlgeschlagener Schreibvorgang (z.B. Platte
+      // voll, Rechte-Problem) soll weder den Flush-Loop noch den Shutdown-Handler fuer die
+      // anderen Kanaele abbrechen. dirty bleibt true, der naechste Tick versucht es erneut.
+      console.error(`[storage] Konnte Zaehlerstand fuer '${this.channel}' nicht speichern, versuche es spaeter erneut:`, err.message);
+    }
   }
 
   // Erzwingt, dass der aktuelle Monats-Key existiert, auch wenn noch 0 Nachrichten kamen
