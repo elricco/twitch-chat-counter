@@ -36,7 +36,10 @@ const registry = new CounterRegistry(CHANNELS);
 registry.startFlushLoop(FLUSH_INTERVAL_SECONDS);
 registry.startMonthRolloverCheck();
 
-const twitchClient = createTwitchClient(CHANNELS, registry);
+// Kopie uebergeben: tmi.js mutiert das channels-Array in-place (haengt '#' an jeden
+// Eintrag), das wuerde sonst auch CHANNELS hier veraendern, das wir unten fuer die
+// Beispiel-URL weiterverwenden.
+const twitchClient = createTwitchClient([...CHANNELS], registry);
 twitchClient.connect().catch((err) => {
   console.error('[twitch] Verbindung fehlgeschlagen:', err.message);
 });
