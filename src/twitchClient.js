@@ -4,6 +4,9 @@ const { isBotMessage } = require('./botFilter');
 function createTwitchClient(channels, registry) {
   const hasCredentials = !!(process.env.TWITCH_USERNAME && process.env.TWITCH_OAUTH_TOKEN);
 
+  // Fuer /health: getrennt von "HTTP laeuft" beobachtbar, ob die IRC-Verbindung tatsaechlich steht.
+  let status = 'connecting';
+
   const client = new tmi.Client({
     options: { debug: false },
     connection: {
@@ -33,16 +36,21 @@ function createTwitchClient(channels, registry) {
   });
 
   client.on('connected', (addr, port) => {
+    status = 'connected';
     console.log(`[twitch] Verbunden mit ${addr}:${port}, Kanaele: ${channels.join(', ')}`);
   });
 
   client.on('disconnected', (reason) => {
+    status = 'disconnected';
     console.warn('[twitch] Verbindung getrennt:', reason);
   });
 
   client.on('reconnect', () => {
+    status = 'connecting';
     console.log('[twitch] Versuche erneut zu verbinden...');
   });
+
+  client.getStatus = () => status;
 
   return client;
 }

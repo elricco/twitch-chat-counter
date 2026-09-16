@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 
-function createServer(registry) {
+function createServer(registry, twitchClient) {
   const app = express();
 
   // Darstellungsseite (public/index.html, style.css, app.js) unter "/" ausliefern.
@@ -58,8 +58,12 @@ function createServer(registry) {
     return res.json(counter.getAll());
   });
 
-  // Einfacher Healthcheck, u.a. praktisch fuer Docker HEALTHCHECK
-  app.get('/health', (req, res) => res.json({ status: 'ok' }));
+  // Healthcheck: liefert immer HTTP 200 solange der HTTP-Server laeuft (wichtig fuer
+  // Docker HEALTHCHECK/Reverse-Proxy, damit kurze Twitch-Reconnects keine Restart-Loops
+  // ausloesen), enthaelt den Twitch-Verbindungsstatus separat im Body fuer Monitoring.
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok', twitch: twitchClient ? twitchClient.getStatus() : 'unknown' });
+  });
 
   return app;
 }

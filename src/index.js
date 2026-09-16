@@ -29,7 +29,7 @@ twitchClient.connect().catch((err) => {
   console.error('[twitch] Verbindung fehlgeschlagen:', err.message);
 });
 
-const app = createServer(registry);
+const app = createServer(registry, twitchClient);
 app.listen(PORT, () => {
   console.log(`[http] Server laeuft auf Port ${PORT}`);
   console.log(`[http] Beispiel: http://localhost:${PORT}/api/${CHANNELS[0]}/counter`);

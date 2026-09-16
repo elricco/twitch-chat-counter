@@ -56,7 +56,15 @@ genau das Format, das euer bestehender Anzeige-Endpunkt erwartet.
 curl http://localhost:3000/api/kanalname/counter
 ```
 
-`GET /health` liefert einen simplen Health-Check für Monitoring/Docker.
+`GET /health` liefert immer `HTTP 200`, solange der HTTP-Server läuft (praktisch für
+Docker `HEALTHCHECK`, damit ein kurzer Twitch-Reconnect keine Restart-Loops auslöst).
+Der Twitch-Verbindungsstatus steht separat im Body für Monitoring:
+
+```json
+{ "status": "ok", "twitch": "connected" }
+```
+
+`twitch` ist `connecting`, `connected` oder `disconnected`.
 
 ### Mehrere Kanäle aggregieren (on-demand)
 
