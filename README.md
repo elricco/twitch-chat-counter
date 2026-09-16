@@ -150,6 +150,19 @@ Läuft der Host hinter einem Reverse-Proxy (z.B. Apache/nginx via cPanel/Plesk),
 `TRUST_PROXY` setzen — sonst sieht die App immer nur die Proxy-IP, was `RATE_LIMIT_MAX`
 wirkungslos macht.
 
+## Tests
+
+```bash
+npm test
+```
+
+Nutzt Node's eingebauten Test-Runner (`node --test`, keine zusätzliche Dependency).
+Abgedeckt sind Bot-Filter, Counter-/Monatslogik, atomarer Storage-Write (inkl.
+Corrupt-File-Fallback), Parameter-Parsing der Anzeigeseite sowie die Server-Routen
+(Aggregate-Route-Reihenfolge, 404/400-Fälle). Die Twitch-IRC-Verbindung selbst lässt
+sich damit nicht testen (kein Netzwerkzugriff in CI) — das bleibt manueller Test gegen
+einen echten Kanal vor dem produktiven Einsatz.
+
 ## Mehrere Kanäle
 
 Einfach in `CHANNELS` mit Komma trennen (`CHANNELS=kanal1,kanal2,kanal3`) —

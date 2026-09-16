@@ -90,3 +90,9 @@ function formatMonthLabel(yearMonth) {
   const [, month] = yearMonth.split('-');
   return MONTH_NAMES[month] || yearMonth;
 }
+
+// Nur fuer Unit-Tests unter Node (node --test) relevant: im Browser ist "module"
+// nicht definiert, daher hat dieser Block dort keinerlei Effekt.
+if (typeof module !== 'undefined') {
+  module.exports = { PARAM_DEFS, FONT_WEIGHT_OPTIONS, parseParams, buildQueryString, formatMonthLabel };
+}
