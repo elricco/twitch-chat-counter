@@ -5,9 +5,13 @@ const { createTwitchClient } = require('./twitchClient');
 const { createServer } = require('./server');
 const { ensureDataDir } = require('./storage');
 
+// Fuehrendes '#' defensiv entfernen: Twitch-Kanaele werden ueberall sonst (Chat, IRC)
+// mit '#' geschrieben, ein versehentlich mitkopiertes '#' in CHANNELS wuerde sonst
+// sowohl die Zaehlung fuer diesen Kanal lautlos brechen (Registry-Key != tmi.js-Kanalname
+// ohne '#') als auch kaputte /api/#kanal/counter-URLs erzeugen.
 const CHANNELS = (process.env.CHANNELS || '')
   .split(',')
-  .map((c) => c.trim().toLowerCase())
+  .map((c) => c.trim().replace(/^#/, '').toLowerCase())
   .filter(Boolean);
 
 const FLUSH_INTERVAL_SECONDS = parseInt(process.env.FLUSH_INTERVAL_SECONDS || '20', 10);

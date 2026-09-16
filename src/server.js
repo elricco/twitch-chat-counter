@@ -33,7 +33,7 @@ function createServer(registry, twitchClient, options = {}) {
     const raw = (req.query.channels || '').toString();
     const requested = raw
       .split(',')
-      .map((c) => c.trim().toLowerCase())
+      .map((c) => c.trim().replace(/^#/, '').toLowerCase())
       .filter(Boolean);
 
     if (requested.length === 0) {
@@ -60,7 +60,7 @@ function createServer(registry, twitchClient, options = {}) {
 
   // GET /api/:channel/counter -> { "2026-07": 15234, "2026-08": 18901, "2026-09": 4021 }
   app.get('/api/:channel/counter', (req, res) => {
-    const channel = req.params.channel.toLowerCase();
+    const channel = req.params.channel.replace(/^#/, '').toLowerCase();
 
     if (!registry.has(channel)) {
       return res.status(404).json({ error: `Kanal '${channel}' wird nicht getrackt` });

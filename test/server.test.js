@@ -43,6 +43,19 @@ test('GET /api/:channel/counter liefert 404 fuer unbekannten Kanal', async () =>
   });
 });
 
+test('ein versehentlich mitgesendetes fuehrendes "#" im Kanalnamen wird toleriert', async () => {
+  // Regressionstest: Kanalnamen werden ueberall sonst mit '#' geschrieben (Chat, IRC),
+  // ein mitkopiertes '#' in der URL (hier %23-kodiert, sonst wuerde der Browser schon
+  // vorher am Fragment abschneiden) darf den Kanal nicht unauffindbar machen.
+  const registry = fakeRegistry({ foo: { '2026-09': 5 } });
+  const app = createServer(registry, null);
+  await withServer(app, async (base) => {
+    const res = await fetch(`${base}/api/%23foo/counter`);
+    assert.equal(res.status, 200);
+    assert.deepEqual(await res.json(), { '2026-09': 5 });
+  });
+});
+
 test('aggregate-Route matcht nicht faelschlich als Kanalname "aggregate"', async () => {
   // Regressionstest fuer die Route-Reihenfolge: /api/aggregate/counter muss von der
   // dedizierten Aggregate-Route bedient werden, nicht von /api/:channel/counter mit
@@ -58,6 +71,16 @@ test('aggregate-Route matcht nicht faelschlich als Kanalname "aggregate"', async
     const ok = await fetch(`${base}/api/aggregate/counter?channels=a,b`);
     assert.equal(ok.status, 200);
     assert.deepEqual(await ok.json(), { '2026-09': 3 });
+  });
+});
+
+test('aggregate-Route toleriert ein fuehrendes "#" pro Kanalname', async () => {
+  const registry = fakeRegistry({ a: { '2026-09': 1 }, b: { '2026-09': 2 } });
+  const app = createServer(registry, null);
+  await withServer(app, async (base) => {
+    const res = await fetch(`${base}/api/aggregate/counter?channels=%23a,%23b`);
+    assert.equal(res.status, 200);
+    assert.deepEqual(await res.json(), { '2026-09': 3 });
   });
 });
 
