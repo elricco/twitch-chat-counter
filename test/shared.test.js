@@ -44,3 +44,20 @@ test('formatMonthLabel uebersetzt bekannte Monate, sonst Fallback auf den Rohwer
   assert.equal(formatMonthLabel('2026-09'), 'September');
   assert.equal(formatMonthLabel('2026-13'), '2026-13');
 });
+
+test('postText: Defaults, Parsing und Roundtrip ueber den Query-String', () => {
+  const defaults = parseParams(paramsFrom({}));
+  assert.equal(defaults.postText, '');
+  assert.equal(defaults.postTextColor, '#fdb336');
+  assert.equal(defaults.postTextFont, 'Bangers');
+  assert.equal(defaults.postTextSize, 32);
+  assert.equal(defaults.postTextWeight, '400');
+
+  const config = parseParams(paramsFrom({ postText: 'von 40.000', postTextSize: '48' }));
+  assert.equal(config.postText, 'von 40.000');
+  assert.equal(config.postTextSize, 48);
+
+  const roundtripped = parseParams(new URLSearchParams(buildQueryString(config)));
+  assert.equal(roundtripped.postText, 'von 40.000');
+  assert.equal(roundtripped.postTextSize, 48);
+});

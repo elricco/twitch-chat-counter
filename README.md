@@ -92,7 +92,7 @@ Kanalnamen. Fehlt der `channels`-Parameter ganz, kommt `400`.
 Der Server liefert zwei Seiten unter `/` aus (kein separater Dienst nötig):
 
 - **`/config.html`** — Formular zur optischen Konfiguration (Kanal-Auswahl,
-  Schriftart/-größe/-farbe für Vortext, Monat und Zähler, Ausrichtung,
+  Schriftart/-größe/-farbe für Vortext, Nachtext, Monat und Zähler, Ausrichtung,
   Hintergrund, Historie an/aus) mit Live-Vorschau. Am Ende steht dort die
   fertige URL zum Kopieren.
 - **`/index.html`** — die eigentliche Anzeige, gesteuert ausschließlich über
@@ -111,12 +111,14 @@ erscheint nur, wenn `history=true` gesetzt ist.
 | `history` | vergangene Monate zusätzlich anzeigen | `false` |
 | `showMonth` | Monatsname zum Zähler anzeigen | `false` |
 | `preText` | Text vor dem Zähler | leer |
+| `postText` | Text nach dem Zähler (z.B. `von 40.000`) | leer |
 | `textAlign` | `left` / `center` / `right` | `left` |
 | `bg` | Hintergrundfarbe (`transparent` für OBS) | `transparent` |
 | `refreshRate` | Aktualisierungsintervall in ms | `5000` |
 | `counterFont`, `counterSize`, `counterWeight`, `counterColor` | Zähler-Styling | Bangers / 70 / 400 / `#fdb336` |
 | `preTextFont`, `preTextSize`, `preTextWeight`, `preTextColor` | Vortext-Styling | wie oben |
 | `monthFont`, `monthSize`, `monthWeight`, `monthColor` | Monatsname-Styling | wie oben |
+| `postTextFont`, `postTextSize`, `postTextWeight`, `postTextColor` | Nachtext-Styling | wie oben |
 
 Alle Werte lassen sich bequem über `/config.html` zusammenklicken, statt die
 URL von Hand zu bauen. Beispiel für eine fertige URL:

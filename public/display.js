@@ -4,6 +4,7 @@ const chatcounterEl = document.getElementById('chatcounter');
 const preTextEl = document.getElementById('preText');
 const monthTextEl = document.getElementById('monthText');
 const counterTextEl = document.getElementById('counterText');
+const postTextEl = document.getElementById('postText');
 const historyEl = document.getElementById('history');
 
 function applyStyles() {
@@ -13,6 +14,7 @@ function applyStyles() {
   loadGoogleFont(config.preTextFont);
   loadGoogleFont(config.monthFont);
   loadGoogleFont(config.counterFont);
+  loadGoogleFont(config.postTextFont);
 
   // Pre-Text
   if (config.preText === '') {
@@ -45,6 +47,19 @@ function applyStyles() {
   counterTextEl.style.fontWeight = config.counterWeight;
   counterTextEl.style.color = config.counterColor;
   counterTextEl.style.textAlign = config.textAlign;
+
+  // Post-Text
+  if (config.postText === '') {
+    postTextEl.style.display = 'none';
+  } else {
+    postTextEl.style.display = 'inline-block';
+    postTextEl.textContent = config.postText;
+    postTextEl.style.fontFamily = `'${config.postTextFont}', sans-serif`;
+    postTextEl.style.fontSize = `${config.postTextSize}px`;
+    postTextEl.style.fontWeight = config.postTextWeight;
+    postTextEl.style.color = config.postTextColor;
+    postTextEl.style.textAlign = config.textAlign;
+  }
 
   if (config.history) {
     historyEl.hidden = false;

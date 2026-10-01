@@ -28,6 +28,13 @@ const els = {
   counterWeight: document.getElementById('counterWeight'),
   counterColor: document.getElementById('counterColor'),
 
+  postText: document.getElementById('postText'),
+  postTextFont: document.getElementById('postTextFont'),
+  postTextFontCustom: document.getElementById('postTextFontCustom'),
+  postTextSize: document.getElementById('postTextSize'),
+  postTextWeight: document.getElementById('postTextWeight'),
+  postTextColor: document.getElementById('postTextColor'),
+
   previewFrame: document.getElementById('previewFrame'),
   generatedUrl: document.getElementById('generatedUrl'),
   copyBtn: document.getElementById('copyBtn'),
@@ -54,6 +61,7 @@ const fontSelectPairs = [
   [els.preTextFont, els.preTextFontCustom],
   [els.monthFont, els.monthFontCustom],
   [els.counterFont, els.counterFontCustom],
+  [els.postTextFont, els.postTextFontCustom],
 ];
 
 for (const [select] of fontSelectPairs) {
@@ -114,6 +122,12 @@ function collectConfig() {
     counterSize: parseInt(els.counterSize.value, 10) || 70,
     counterWeight: els.counterWeight.value,
     counterColor: els.counterColor.value,
+
+    postText: els.postText.value,
+    postTextFont: resolveFont(els.postTextFont, els.postTextFontCustom),
+    postTextSize: parseInt(els.postTextSize.value, 10) || 32,
+    postTextWeight: els.postTextWeight.value,
+    postTextColor: els.postTextColor.value,
   };
 }
 

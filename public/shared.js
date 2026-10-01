@@ -33,6 +33,12 @@ const PARAM_DEFS = [
   { key: 'counterFont', type: 'string', default: 'Bangers' },
   { key: 'counterSize', type: 'number', default: 70 },
   { key: 'counterWeight', type: 'string', default: '400' },
+
+  { key: 'postText', type: 'string', default: '' },
+  { key: 'postTextColor', type: 'color', default: '#fdb336' },
+  { key: 'postTextFont', type: 'string', default: 'Bangers' },
+  { key: 'postTextSize', type: 'number', default: 32 },
+  { key: 'postTextWeight', type: 'string', default: '400' },
 ];
 
 const FONT_WEIGHT_OPTIONS = [
